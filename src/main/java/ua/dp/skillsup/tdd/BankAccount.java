@@ -4,6 +4,10 @@ public class BankAccount {
     private String number;
     private double amount;
 
+    public BankAccount(double amount){
+        this.amount = amount;
+    }
+
     public String getNumber() {
         return number;
     }
