@@ -10,6 +10,7 @@ import java.util.Arrays;
  */
 public class MetaProg {
     public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        /*
         User user = new User();
         user.setName("John Doe");
         user.setAmount(200);
@@ -39,6 +40,8 @@ public class MetaProg {
 
         Method foo = clazz.getDeclaredMethod("foo");
         System.out.println(foo.invoke(null));
+        */
+        Executor.execute("ua.dp.skillsup.reflection");
     }
 
     @Override
