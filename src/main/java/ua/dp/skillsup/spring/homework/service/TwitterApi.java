@@ -1,12 +1,21 @@
 package ua.dp.skillsup.spring.homework.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ua.dp.skillsup.spring.homework.Post;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Component()
 public class TwitterApi implements ServiceApi{
+    @Autowired
+    @Value("${twitter_username}")
     private String username;
+
+    @Autowired
+    @Value("${twitter_password}")
     private String password;
 
     @Override
