@@ -1,6 +1,7 @@
 package ua.dp.skillsup.spring.homework;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ua.dp.skillsup.spring.Application;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,8 @@ public class SocialServiceApp {
         System.out.println("Start");
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("socialApplicationContext.xml");
         System.out.println("Context initialised");
+        SocialServiceApp app = (SocialServiceApp)context.getBean("socialServiceApp");
+        app.run();
 
         //new SocialServiceApp().run();
     }
@@ -26,5 +29,13 @@ public class SocialServiceApp {
         for (Post post : posts) {
             System.out.println(post);
         }
+    }
+
+    public List<PostProvider> getProviders() {
+        return providers;
+    }
+
+    public void setProviders(List<PostProvider> providers) {
+        this.providers = providers;
     }
 }

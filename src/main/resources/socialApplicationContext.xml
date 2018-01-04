@@ -27,7 +27,7 @@
         <property name="password" value="Sq1VeYqKOvv"/>
     </bean>
 
-    <bean id="PostProvider_facebook" class="ua.dp.skillsup.spring.homework.PostProvider">
+    <bean id="postProvider_facebook" class="ua.dp.skillsup.spring.homework.PostProvider">
         <property name="serviceApi" ref="facebookApi"/>
         <property name="postFilter" ref="postFilter"/>
         <property name="keyWord" value="dog"/>
@@ -45,10 +45,10 @@
         <property name="keyWord" value="dog"/>
     </bean>
 
-    <bean id="SocialServiceApp" class="ua.dp.skillsup.spring.homework.SocialServiceApp">
+    <bean id="socialServiceApp" class="ua.dp.skillsup.spring.homework.SocialServiceApp">
        <property name="providers">
            <list>
-               <ref bean ="PostProvider_facebook" />
+               <ref bean ="postProvider_facebook" />
                <ref bean ="postProvider_instagram" />
                <ref bean ="postProvider_twitter" />
            </list>

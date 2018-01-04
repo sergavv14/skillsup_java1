@@ -10,4 +10,5 @@ public class PostFilter {
                 post.getText().toLowerCase().contains(keyWord.toLowerCase()))
                 .collect(Collectors.<Post>toList());
     }
+
 }

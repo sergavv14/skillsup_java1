@@ -19,4 +19,20 @@ public class InstagramApi implements ServiceApi{
                 new Post("I'm such a hot chick! #selfie #kfc", "http://instagram.com/selfie.jpg")
         );
     }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getAppSecret() {
+        return appSecret;
+    }
+
+    public void setAppSecret(String appSecret) {
+        this.appSecret = appSecret;
+    }
 }

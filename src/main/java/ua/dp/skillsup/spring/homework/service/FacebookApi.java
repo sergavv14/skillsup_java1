@@ -19,4 +19,20 @@ public class FacebookApi implements ServiceApi{
                 new Post("Dogs are awesome", "http://facebook.com/goodboy.jpg")
         );
     }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 }
