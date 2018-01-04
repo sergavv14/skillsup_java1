@@ -1,5 +1,7 @@
 package ua.dp.skillsup.spring.homework;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,11 @@ public class SocialServiceApp {
 
     public static void main(String[] args) {
         //todo instantiate App with spring
-        new SocialServiceApp().run();
+        System.out.println("Start");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("socialApplicationContext.xml");
+        System.out.println("Context initialised");
+
+        //new SocialServiceApp().run();
     }
 
     public void run(){
