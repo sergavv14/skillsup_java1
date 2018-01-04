@@ -9,6 +9,50 @@
 
     <!-- <bean/> definitions here -->
 
+    <bean id="postFilter" class="ua.dp.skillsup.spring.homework.PostFilter">
+    </bean>
 
+    <bean id="facebookApi" class="ua.dp.skillsup.spring.homework.service.FacebookApi">
+        <property name="apiKey" value="1092988854150"/>
+        <property name="secret" value="Jn9AxjYe8"/>
+    </bean>
+
+    <bean id="instagramApi" class="ua.dp.skillsup.spring.homework.service.InstagramApi">
+        <property name="appName" value="q3eenjkass"/>
+        <property name="appSecret" value="5lqK3p9XtW"/>
+    </bean>
+
+    <bean id="twitterApi" class="ua.dp.skillsup.spring.homework.service.TwitterApi">
+        <property name="username" value="23t91p6hlofsg"/>
+        <property name="password" value="Sq1VeYqKOvv"/>
+    </bean>
+
+    <bean id="PostProvider_facebook" class="ua.dp.skillsup.spring.homework.PostProvider">
+        <property name="serviceApi" ref="facebookApi"/>
+        <property name="postFilter" ref="postFilter"/>
+        <property name="keyWord" value="dog"/>
+    </bean>
+
+    <bean id="postProvider_instagram" class="ua.dp.skillsup.spring.homework.PostProvider">
+        <property name="serviceApi" ref="instagramApi"/>
+        <property name="postFilter" ref="postFilter"/>
+        <property name="keyWord" value="dog"/>
+    </bean>
+
+    <bean id="postProvider_twitter" class="ua.dp.skillsup.spring.homework.PostProvider">
+        <property name="serviceApi" ref="twitterApi"/>
+        <property name="postFilter" ref="postFilter"/>
+        <property name="keyWord" value="dog"/>
+    </bean>
+
+    <bean id="SocialServiceApp" class="ua.dp.skillsup.spring.homework.SocialServiceApp">
+       <property name="providers">
+           <list>
+               <ref bean ="PostProvider_facebook" />
+               <ref bean ="postProvider_instagram" />
+               <ref bean ="postProvider_twitter" />
+           </list>
+       </property>
+   </bean>
 
 </beans>
