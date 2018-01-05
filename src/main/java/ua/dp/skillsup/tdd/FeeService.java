@@ -34,6 +34,9 @@ public class FeeService implements InitializingBean{
 
 
     public double getFee(double paymentAmount) {
+        if (weekendService.isWeekend())
+            return fee*1.5;
+
         return fee;
     }
 
