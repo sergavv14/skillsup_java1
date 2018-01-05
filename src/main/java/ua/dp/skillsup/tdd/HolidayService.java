@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Random;
 
 public class HolidayService {
-    public boolean isHoliday(Date date){
+    public boolean isHoliday(){
         Random random = new Random();
         return random.nextDouble() > 0.9;
     }
