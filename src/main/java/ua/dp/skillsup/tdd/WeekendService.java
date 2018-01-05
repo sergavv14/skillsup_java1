@@ -4,7 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class WeekendService {
-    LocalDate localDate;
+    private LocalDate localDate;
 
     public WeekendService() {this.localDate = LocalDate.now();}
 
