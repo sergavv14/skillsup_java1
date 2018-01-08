@@ -3,6 +3,8 @@ package ua.dp.skillsup.tdd;
 import org.springframework.beans.factory.InitializingBean;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Date;
+
 public class FeeService implements InitializingBean{
 
     private HolidayService holidayService;
@@ -16,14 +18,12 @@ public class FeeService implements InitializingBean{
     }
 
     public FeeService(HolidayService holidayService) {
-        fee = 0.01;
-        this.weekendService = new WeekendService();
+        this();
         this.holidayService = holidayService;
     }
 
     public FeeService(WeekendService weekendService) {
-        fee = 0.01;
-        this.weekendService = weekendService;
+        this();
         this.holidayService = new HolidayService();
     }
 
@@ -43,12 +43,15 @@ public class FeeService implements InitializingBean{
     public WeekendService getWeekendService() {return weekendService;}
 
     public double getFee(double paymentAmount) {
-        if (weekendService.isWeekend() & holidayService.isHoliday()) {
-            return fee*2;
-        }if(!weekendService.isWeekend() & !holidayService.isHoliday()){
+        if(!weekendService.isWeekend() & !holidayService.isHoliday(new Date())) {
             return fee;
+        }if ((weekendService.isWeekend() & !holidayService.isHoliday(new Date())) ||
+        (!weekendService.isWeekend() & holidayService.isHoliday(new Date()))){
+            return fee*1.5;
+        }if (weekendService.isWeekend() & holidayService.isHoliday(new Date())) {
+            return fee*2;
         }
-        return fee*1.5;
+        return fee;
     }
 
 
