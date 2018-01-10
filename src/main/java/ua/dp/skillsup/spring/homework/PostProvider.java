@@ -22,7 +22,7 @@ public class PostProvider {
     }
 
     public PostFilter getPostFilter() {
-        return postFilter;
+        return this.postFilter;
     }
 
     public void setPostFilter(PostFilter postFilter) {
