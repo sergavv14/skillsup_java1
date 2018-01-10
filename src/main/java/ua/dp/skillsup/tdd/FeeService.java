@@ -11,27 +11,19 @@ public class FeeService implements InitializingBean{
     private WeekendService weekendService;
     private double fee;
 
-    public FeeService() {
-        fee = 0.01;
-        this.weekendService = new WeekendService();
-        this.holidayService = new HolidayService();
-    }
-
-    public FeeService(HolidayService holidayService) {
-        this();
-        this.holidayService = holidayService;
-    }
-
-    public FeeService(WeekendService weekendService) {
-        this();
-        this.holidayService = new HolidayService();
-    }
-
     public FeeService(WeekendService weekendService, HolidayService holidayService){
         fee = 0.01;
         this.weekendService = weekendService;
         this.holidayService = holidayService;
     }
+
+    public FeeService() {this(new WeekendService(), new HolidayService());}
+
+    public FeeService(HolidayService holidayService) {this(new WeekendService(), holidayService);}
+
+    public FeeService(WeekendService weekendService) {this(weekendService, new HolidayService());}
+
+
 
     public void setHolidayService(HolidayService holidayService) {this.holidayService = holidayService;}
 

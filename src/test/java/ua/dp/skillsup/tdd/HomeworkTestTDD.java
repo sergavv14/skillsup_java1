@@ -1,18 +1,14 @@
 package ua.dp.skillsup.tdd;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Date;
 
 public class HomeworkTestTDD {
     BankAccount sender, recipient;
-    double expectedMoney_sender, expectedMoney_recipient;
     FeeService feeService;
     AccountService service;
     WeekendService mockWeekendService;
@@ -26,24 +22,18 @@ public class HomeworkTestTDD {
         mockHolidayService = Mockito.mock(HolidayService.class);
     }
 
-    @After
-    public void after() {
-        feeService = new FeeService(mockWeekendService, mockHolidayService);
-        service = new AccountService(feeService);
-
-        service.transferMoney(sender, recipient, 100);
-
-        Assert.assertEquals(expectedMoney_sender, sender.getAmount(), 0.00001);
-        Assert.assertEquals(expectedMoney_recipient, recipient.getAmount(), 0.00001);
-    }
-
     @Test
     public void transferMoneyOnWorkingdays(){
         Mockito.when(mockWeekendService.isWeekend()).thenReturn(false);
         Mockito.when(mockHolidayService.isHoliday(Mockito.any(Date.class))).thenReturn(false);
 
-        expectedMoney_sender = 0;
-        expectedMoney_recipient = 99;
+        feeService = new FeeService(mockWeekendService, mockHolidayService);
+        service = new AccountService(feeService);
+
+        service.transferMoney(sender, recipient, 100);
+
+        Assert.assertEquals(0, sender.getAmount(), 0.00001);
+        Assert.assertEquals(99, recipient.getAmount(), 0.00001);
     }
 
    @Test
@@ -51,17 +41,28 @@ public class HomeworkTestTDD {
        Mockito.when(mockWeekendService.isWeekend()).thenReturn(true);
        Mockito.when(mockHolidayService.isHoliday(Mockito.any(Date.class))).thenReturn(false);
 
-       expectedMoney_sender = 0;
-       expectedMoney_recipient = 98.5;
-    }
+       feeService = new FeeService(mockWeekendService, mockHolidayService);
+       service = new AccountService(feeService);
+
+       service.transferMoney(sender, recipient, 100);
+
+       Assert.assertEquals(0, sender.getAmount(), 0.00001);
+       Assert.assertEquals(98.5, recipient.getAmount(), 0.00001);
+   }
+
 
     @Test
     public void transferMoneyOnWorkingdaysOnNationalHolidays(){
         Mockito.when(mockWeekendService.isWeekend()).thenReturn(false);
         Mockito.when(mockHolidayService.isHoliday(Mockito.any(Date.class))).thenReturn(true);
 
-        expectedMoney_sender = 0;
-        expectedMoney_recipient = 98.5;
+        feeService = new FeeService(mockWeekendService, mockHolidayService);
+        service = new AccountService(feeService);
+
+        service.transferMoney(sender, recipient, 100);
+
+        Assert.assertEquals(0, sender.getAmount(), 0.00001);
+        Assert.assertEquals(98.5, recipient.getAmount(), 0.00001);
     }
 
     @Test
@@ -69,7 +70,12 @@ public class HomeworkTestTDD {
         Mockito.when(mockWeekendService.isWeekend()).thenReturn(true);
         Mockito.when(mockHolidayService.isHoliday(Mockito.any(Date.class))).thenReturn(true);
 
-        expectedMoney_sender = 0;
-        expectedMoney_recipient = 98;
+        feeService = new FeeService(mockWeekendService, mockHolidayService);
+        service = new AccountService(feeService);
+
+        service.transferMoney(sender, recipient, 100);
+
+        Assert.assertEquals(0, sender.getAmount(), 0.00001);
+        Assert.assertEquals(98, recipient.getAmount(), 0.00001);
     }
 }
