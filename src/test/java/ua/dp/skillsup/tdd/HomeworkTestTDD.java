@@ -20,15 +20,14 @@ public class HomeworkTestTDD {
         recipient = new BankAccount(0);
         mockWeekendService = Mockito.mock(WeekendService.class);
         mockHolidayService = Mockito.mock(HolidayService.class);
+        feeService = new FeeService(mockWeekendService, mockHolidayService);
+        service = new AccountService(feeService);
     }
 
     @Test
     public void transferMoneyOnWorkingdays(){
         Mockito.when(mockWeekendService.isWeekend()).thenReturn(false);
         Mockito.when(mockHolidayService.isHoliday(Mockito.any(Date.class))).thenReturn(false);
-
-        feeService = new FeeService(mockWeekendService, mockHolidayService);
-        service = new AccountService(feeService);
 
         service.transferMoney(sender, recipient, 100);
 
@@ -40,9 +39,6 @@ public class HomeworkTestTDD {
     public void transferMoneyOnWeekend(){
        Mockito.when(mockWeekendService.isWeekend()).thenReturn(true);
        Mockito.when(mockHolidayService.isHoliday(Mockito.any(Date.class))).thenReturn(false);
-
-       feeService = new FeeService(mockWeekendService, mockHolidayService);
-       service = new AccountService(feeService);
 
        service.transferMoney(sender, recipient, 100);
 
@@ -56,9 +52,6 @@ public class HomeworkTestTDD {
         Mockito.when(mockWeekendService.isWeekend()).thenReturn(false);
         Mockito.when(mockHolidayService.isHoliday(Mockito.any(Date.class))).thenReturn(true);
 
-        feeService = new FeeService(mockWeekendService, mockHolidayService);
-        service = new AccountService(feeService);
-
         service.transferMoney(sender, recipient, 100);
 
         Assert.assertEquals(0, sender.getAmount(), 0.00001);
@@ -69,9 +62,6 @@ public class HomeworkTestTDD {
     public void transferMoneyOnWeekendOnNationalHolidays(){
         Mockito.when(mockWeekendService.isWeekend()).thenReturn(true);
         Mockito.when(mockHolidayService.isHoliday(Mockito.any(Date.class))).thenReturn(true);
-
-        feeService = new FeeService(mockWeekendService, mockHolidayService);
-        service = new AccountService(feeService);
 
         service.transferMoney(sender, recipient, 100);
 
