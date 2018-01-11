@@ -1,8 +1,6 @@
 package ua.dp.skillsup.reflection;
 
-/**
- * Created by skillsup on 12.12.17.
- */
+
 public class User {
     private String name;
     private double amount;
