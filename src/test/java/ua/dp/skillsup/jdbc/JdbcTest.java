@@ -41,11 +41,10 @@ public class JdbcTest {
                 "  ('myAdmin','$1234$DobXCJtm7dQwfNz3J0ZILevNNXVslyrY2j0J2dKOBG56uPpBooVoy',\n" +
                 "   'test@gmail.com');");
         statement.close();
-        ResultSet resultSet = conn.prepareStatement("select * from user").executeQuery();
 
         statement = conn.createStatement();
-        statement.execute("DROP TABLE IF EXISTS post;" +
-                "CREATE TABLE post\n" +
+        statement.execute("DROP TABLE IF EXISTS POST;" +
+                "CREATE TABLE POST\n" +
                 "(\n" +
                 "    POST_ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "    AUTHOR_ID INT,\n" +
@@ -55,19 +54,22 @@ public class JdbcTest {
         statement.close();
 
         statement = conn.createStatement();
-        statement.execute("INSERT INTO post(AUTHOR_ID, TITLE, CONTACT) VALUES\n" +
-                "  ('1','Hello This is my post №1','CONTACT1')," +
-                "  ('2','Hello This is my post №2','CONTACT2')," +
-                "  ('1','Hello This is my post №3','CONTACT3')" +
+        statement.execute("INSERT INTO POST(AUTHOR_ID, TITLE, CONTACT) VALUES\n" +
+                "  (1,'Hello This is my post №1','CONTACT1')," +
+                "  (2,'Hello This is my post №2','CONTACT2')," +
+                "  (1,'Hello This is my post №3','CONTACT3')" +
                 "   ;");
         statement.close();
 
-        ResultSet resultSet1 = conn.prepareStatement("select " +
-                "c1.USERNAME, " +
-                "c2.TITLE " +
-                "FROM USER c1 INNER JOIN post c2" +
-                "WHERE c1.ID=c2.AUTHOR_ID").executeQuery();
+        //classwork
+        ResultSet resultSet1 = conn.prepareStatement("Select " +
+                "t1.USERNAME, " +
+                "t2.TITLE " +
+                "FROM USER t1 INNER JOIN POST t2 " +
+                "ON (t1.ID = t2.AUTHOR_ID)").executeQuery();
         printResultSet(resultSet1);
+
+
 
 
 
