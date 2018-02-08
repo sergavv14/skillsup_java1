@@ -41,7 +41,7 @@ public class JdbcTest {
         statement.execute("DROP TABLE IF EXISTS POST;" +
                 "CREATE TABLE POST\n" +
                 "(\n" +
-                "    POST_ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
+                "    ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "    AUTHOR_ID INT,\n" +
                 "    TITLE VARCHAR(64) NOT NULL,\n" +
                 "    CONTACT VARCHAR(60) NOT NULL,\n" +
@@ -124,59 +124,25 @@ public class JdbcTest {
         System.out.println("a) list of all post with columns (title, username)");
 
         ResultSet resultSet1 = conn.prepareStatement("SELECT " +
-                "t2.TITLE, " +
-                "t1.USERNAME, " +
-                "t2.TIMESTAMP " +
-                "FROM USER t1 INNER JOIN POST t2 " +
-                "ON (t1.ID = t2.AUTHOR_ID)").executeQuery();
+                "p.TITLE, " +
+                "u.USERNAME, " +
+                "p.TIMESTAMP " +
+                "FROM USER u INNER JOIN POST p " +
+                "ON u.ID = p.AUTHOR_ID").executeQuery();
         printResultSet(resultSet1);
-
-        /*
-        ________
-        a) list of all post with columns (title, username)
-        TITLE|USERNAME|TIMESTAMP|
-        Hello my name is Admin !!! |admin|2015-04-27 22:06:47.555|
-        Admin write: -This is my post №1|admin|2017-10-13 22:06:47.555|
-        Admin write: -This is my post №2|admin|2018-01-20 22:06:47.555|
-        Hello my name is USER2 !!! |user2|2017-12-02 22:06:47.555|
-        Hello my name is USER3 !!! |user3|2018-01-16 22:06:47.555|
-        Hello my name is USER4 !!! |user4|2018-01-11 22:06:47.555|
-        Hello my name is USER5 !!! |user5|2016-09-08 22:06:47.555|
-        USER5 write: -This is my post №2|user5|2018-01-01 22:06:47.555|
-        USER5 write: -This is my post №3|user5|2018-01-11 22:06:47.555|
-        USER5 write: -This is my post №4|user5|2018-01-20 22:06:47.555|
-         */
-
 
         //b) post list (title, total_likes_received) with the most popular post at the top
         System.out.println("________");
         System.out.println("b) post list (title, total_likes_received) with the most popular post at the top");
 
         ResultSet resultSet2 = conn.prepareStatement("SELECT " +
-                "t1.TITLE, " +
-                "COUNT(t2.ID) as total_likes_received " +
-                "FROM POST t1 INNER JOIN LIKE_POST t2 " +
-                "ON (t1.POST_ID = t2.POST_ID) " +
-                "GROUP BY t1.POST_ID " +
+                "p.TITLE, " +
+                "COUNT(l.ID) as total_likes_received " +
+                "FROM POST p INNER JOIN LIKE_POST l " +
+                "ON p.ID = l.POST_ID " +
+                "GROUP BY p.ID " +
                 "ORDER BY total_likes_received  DESC").executeQuery();
         printResultSet(resultSet2);
-
-        /*
-        ________
-        b) post list (title, total_likes_received) with the most popular post at the top
-        TITLE|TOTAL_LIKES_RECEIVED|
-        Hello my name is USER3 !!! |5|
-        Hello my name is Admin !!! |3|
-        Hello my name is USER4 !!! |3|
-        USER5 write: -This is my post №4|3|
-        Admin write: -This is my post №1|1|
-        Admin write: -This is my post №2|1|
-        Hello my name is USER2 !!! |1|
-        Hello my name is USER5 !!! |1|
-        USER5 write: -This is my post №2|1|
-        USER5 write: -This is my post №3|1|
-         */
-
 
         //c) post list (title, total_likes_received) with the most popular post at the top,
         // display only posts written during some time interval
@@ -191,27 +157,17 @@ public class JdbcTest {
         Timestamp EndTimestamp = new Timestamp(calendar.getTime().getTime());
 
         PreparedStatement prepState = conn.prepareStatement("SELECT " +
-                "t1.TITLE, " +
-                "COUNT(t2.ID) as total_likes_received " +
-                "FROM POST t1 INNER JOIN LIKE_POST t2 " +
-                "ON (t1.POST_ID = t2.POST_ID) " +
-                "WHERE (t1.TIMESTAMP>?) AND (t1.TIMESTAMP<?) " +
-                "GROUP BY t1.POST_ID " +
+                "p.TITLE, " +
+                "COUNT(l.ID) as total_likes_received " +
+                "FROM POST p INNER JOIN LIKE_POST l " +
+                "ON p.ID = l.POST_ID " +
+                "WHERE p.TIMESTAMP>? AND p.TIMESTAMP<? " +
+                "GROUP BY p.ID " +
                 "ORDER BY total_likes_received  DESC");
         prepState.setTimestamp(1, BeginTimestamp);
         prepState.setTimestamp(2, EndTimestamp);
         ResultSet resultSet3 = prepState.executeQuery();
         printResultSet(resultSet3);
-
-        /*
-        ________
-        c) post list (title, total_likes_received) with the most popular post at the top,
-        display only posts written during some time interval
-        TITLE|TOTAL_LIKES_RECEIVED|
-        Hello my name is Admin !!! |3|
-        Hello my name is USER5 !!! |1|
-         */
-
 
         //d) post list (title, total_likes_received) with the most popular post at the top,
         // display only posts that have more than 5 likes
@@ -220,53 +176,46 @@ public class JdbcTest {
         System.out.println("display only posts that have more than 5 likes");
 
         ResultSet resultSet4 = conn.prepareStatement("SELECT " +
-                "t1.TITLE, " +
-                "COUNT(t2.ID) as total_likes_received " +
-                "FROM POST t1 INNER JOIN LIKE_POST t2 " +
-                "ON (t1.POST_ID = t2.POST_ID) " +
-                "GROUP BY t1.POST_ID "+
-                "HAVING COUNT(t2.ID)>5").executeQuery();
+                "p.TITLE, " +
+                "COUNT(l.ID) as total_likes_received " +
+                "FROM POST p INNER JOIN LIKE_POST l " +
+                "ON p.ID = l.POST_ID " +
+                "GROUP BY p.ID "+
+                "HAVING COUNT(l.ID)>5").executeQuery();
         printResultSet(resultSet4);
-
-        /*
-        ________
-        d) post list (title, total_likes_received) with the most popular post at the top,
-        display only posts that have more than 5 likes
-        TITLE|TOTAL_LIKES_RECEIVED|
-         */
-
 
         //e) user list (username, total_likes_received) with the most popular user at the top
         System.out.println("________");
         System.out.println("e) user list (username, total_likes_received) with the most popular user at the top");
 
-
+        System.out.println("Version E.1 :");
         String countLikeForPostUsers = "SELECT " +
-                "t1.AUTHOR_ID as AUTHOR_ID, " +
-                "COUNT(t2.ID) as All_like " +
-                "FROM POST t1 INNER JOIN LIKE_POST t2 " +
-                "ON (t1.POST_ID = t2.POST_ID) " +
-                "GROUP BY t1.POST_ID";
+                "p.AUTHOR_ID as AUTHOR_ID, " +
+                "COUNT(l.ID) as All_like " +
+                "FROM POST p INNER JOIN LIKE_POST l " +
+                "ON p.ID = l.POST_ID " +
+                "GROUP BY p.ID";
 
         ResultSet resultSet5 = conn.prepareStatement("SELECT " +
-                "tt1.USERNAME, " +
-                "SUM(tt2.All_like) as total_likes_received " +
-                "FROM USER tt1 INNER JOIN ("+countLikeForPostUsers+") tt2 " +
-                "ON (tt1.ID = tt2.AUTHOR_ID) " +
-                "GROUP BY tt1.ID " +
+                "u.USERNAME, " +
+                "SUM(countLike.All_like) as total_likes_received " +
+                "FROM USER u INNER JOIN ("+countLikeForPostUsers+") countLike " +
+                "ON u.ID = countLike.AUTHOR_ID " +
+                "GROUP BY u.ID " +
                 "ORDER BY total_likes_received DESC").executeQuery();
         printResultSet(resultSet5);
 
-        /*
-        ________
-        e) user list (username, total_likes_received) with the most popular user at the top
-        USERNAME|TOTAL_LIKES_RECEIVED|
-        user5|6|
-        admin|5|
-        user3|5|
-        user4|3|
-        user2|1|
-         */
+        System.out.println("");
+        System.out.println("Version E.2 :");
+        ResultSet resultSet8 = conn.prepareStatement("SELECT " +
+                "u.USERNAME, " +
+                "COUNT(l.ID) as total_likes_received " +
+                "FROM POST p " +
+                "INNER JOIN USER u ON p.AUTHOR_ID = u.ID " +
+                "INNER JOIN LIKE_POST l ON p.ID = l.POST_ID " +
+                "GROUP BY u.ID " +
+                "ORDER BY total_likes_received DESC").executeQuery();
+        printResultSet(resultSet8);
 
 
         //f) user list (username, total_likes_given) with the most active user at the top
@@ -274,57 +223,36 @@ public class JdbcTest {
         System.out.println("f) user list (username, total_likes_given) with the most active user at the top");
 
         ResultSet resultSet6 = conn.prepareStatement("SELECT " +
-                "t1.USERNAME, " +
-                "COUNT(t2.ID) as total_likes_given " +
-                "FROM USER t1 INNER JOIN LIKE_POST t2 " +
-                "ON (t1.ID = t2.AUTHOR_ID) " +
-                "GROUP BY t1.ID " +
+                "u.USERNAME, " +
+                "COUNT(l.ID) as total_likes_given " +
+                "FROM USER u INNER JOIN LIKE_POST l " +
+                "ON u.ID = l.AUTHOR_ID " +
+                "GROUP BY u.ID " +
                 "ORDER BY total_likes_given DESC").executeQuery();
         printResultSet(resultSet6);
-
-        /*
-        ________
-        f) user list (username, total_likes_given) with the most active user at the top
-        USERNAME|TOTAL_LIKES_GIVEN|
-        user2|6|
-        user3|6|
-        admin|5|
-        user4|2|
-        user5|1|
-         */
-
 
         //g) user list (username, average_likes_per_post) with the most popular user at the top
         System.out.println("________");
         System.out.println("g) user list (username, average_likes_per_post) with the most popular user at the top");
 
         String countLikeForPostUsers1 = "SELECT " +
-                "t1.AUTHOR_ID as AUTHOR_ID, " +
-                "t1.POST_ID as POST_ID, " +
-                "COUNT(t2.ID) as All_like " +
-                "FROM POST t1 INNER JOIN LIKE_POST t2 " +
-                "ON (t1.POST_ID = t2.POST_ID) " +
-                "GROUP BY t1.POST_ID";
+                "p.AUTHOR_ID as AUTHOR_ID, " +
+                "p.ID as POST_ID, " +
+                "COUNT(l.ID) as All_like " +
+                "FROM POST p INNER JOIN LIKE_POST l " +
+                "ON p.ID = l.POST_ID " +
+                "GROUP BY p.ID";
 
         ResultSet resultSet7 = conn.prepareStatement("SELECT " +
-                "tt1.USERNAME, " +
-                "AVG(tt2.All_like) as average_likes_per_post " +
-                "FROM USER tt1 INNER JOIN ("+countLikeForPostUsers1+") tt2 " +
-                "ON (tt1.ID = tt2.AUTHOR_ID) " +
-                "GROUP BY tt1.ID " +
+                "u.USERNAME, " +
+                "AVG(countLike.All_like) as average_likes_per_post " +
+                "FROM USER u INNER JOIN ("+countLikeForPostUsers1+") countLike " +
+                "ON u.ID = countLike.AUTHOR_ID " +
+                "GROUP BY u.ID " +
                 "ORDER BY average_likes_per_post DESC").executeQuery();
         printResultSet(resultSet7);
 
-        /*
-        ________
-        g) user list (username, average_likes_per_post) with the most popular user at the top
-        USERNAME|AVERAGE_LIKES_PER_POST|
-        user3|5|
-        user4|3|
-        admin|2|
-        user5|2|
-        user2|1|
-         */
+
 
 
     }
